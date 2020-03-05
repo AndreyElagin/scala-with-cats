@@ -8,8 +8,6 @@ import org.scalatest.matchers.should.Matchers
 
 class CatShow extends AnyFreeSpecLike with Matchers {
 
-
-
   implicit val catShow: Show[Cat] =
     Show.show(c => s"${c.name} is a ${c.age} year-old ${c.color} cat.")
 
