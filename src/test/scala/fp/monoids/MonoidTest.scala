@@ -1,12 +1,12 @@
 package fp.monoids
 
+import fp.monoids.Monoid._
 import org.scalatest.freespec.AnyFreeSpecLike
 import org.scalatest.matchers.should.Matchers
 
 class MonoidTest extends AnyFreeSpecLike with Matchers {
 
   "booleanAnd should abide the monoid laws" in {
-    import fp.monoids.Monoid._
     import fp.monoids.MonoidInstances.{ booleanAndMonoid => andMonoid }
 
     true combine andMonoid.empty shouldBe true
@@ -22,7 +22,6 @@ class MonoidTest extends AnyFreeSpecLike with Matchers {
   }
 
   "booleanOr should abide the monoid laws" in {
-    import fp.monoids.Monoid._
     import fp.monoids.MonoidInstances.{ booleanOrMonoid => orMonoid }
 
     true combine orMonoid.empty shouldBe true
@@ -38,7 +37,6 @@ class MonoidTest extends AnyFreeSpecLike with Matchers {
   }
 
   "booleanXor should abide the monoid laws" in {
-    import fp.monoids.Monoid._
     import fp.monoids.MonoidInstances.{ booleanXorMonoid => xorMonoid }
 
     true combine xorMonoid.empty shouldBe true
@@ -54,7 +52,6 @@ class MonoidTest extends AnyFreeSpecLike with Matchers {
   }
 
   "booleanNor should abide the monoid laws" in {
-    import fp.monoids.Monoid._
     import fp.monoids.MonoidInstances.{ booleanNorMonoid => norMonoid }
 
     true combine norMonoid.empty shouldBe true
