@@ -1,11 +1,10 @@
-package printable
+package fp.printable
 
+import fp.Cat
 import org.scalatest.freespec.AnyFreeSpecLike
 import org.scalatest.matchers.should.Matchers
 
 class CatPrinterTest extends AnyFreeSpecLike with Matchers {
-
-  case class Cat(name: String, age: Int, color: String)
 
   implicit val printableCat: Printable[Cat] = new Printable[Cat] {
     def format(c: Cat): String =
@@ -20,7 +19,7 @@ class CatPrinterTest extends AnyFreeSpecLike with Matchers {
   }
 
   "should format cat using extension method" in {
-    import printable.PrintableSyntax._
+    import fp.printable.PrintableSyntax._
 
     Cat("Satan", 2, "Pink").format shouldBe "Satan is a 2 year-old Pink cat."
   }

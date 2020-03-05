@@ -1,4 +1,4 @@
-package printable
+package fp.printable
 
 trait Printable[A] {
   def format(a: A): String

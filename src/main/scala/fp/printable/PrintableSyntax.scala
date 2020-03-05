@@ -1,4 +1,4 @@
-package printable
+package fp.printable
 
 object PrintableSyntax {
   implicit class PrintableOps[A](a: A) {
