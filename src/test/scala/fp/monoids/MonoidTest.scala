@@ -1,68 +1,99 @@
 package fp.monoids
 
-import fp.monoids.Monoid._
 import org.scalatest.freespec.AnyFreeSpecLike
 import org.scalatest.matchers.should.Matchers
 
 class MonoidTest extends AnyFreeSpecLike with Matchers {
 
-  "booleanAnd should abide the monoid laws" in {
-    import fp.monoids.MonoidInstances.{ booleanAndMonoid => andMonoid }
-
-    true combine andMonoid.empty shouldBe true
-    false combine andMonoid.empty shouldBe false
-
-    andMonoid.empty combine true shouldBe true
-    andMonoid.empty combine false shouldBe false
-
-    true combine true shouldBe true
-    false combine true shouldBe false
-    true combine false shouldBe false
-    false combine false shouldBe false
+  def associativeLaw[A](x: A, y: A, z: A)(implicit m: Monoid[A]): Boolean = {
+    m.combine(x, m.combine(y, z)) == m.combine(m.combine(x, y), z)
   }
 
-  "booleanOr should abide the monoid laws" in {
-    import fp.monoids.MonoidInstances.{ booleanOrMonoid => orMonoid }
-
-    true combine orMonoid.empty shouldBe true
-    false combine orMonoid.empty shouldBe false
-
-    orMonoid.empty combine true shouldBe true
-    orMonoid.empty combine false shouldBe false
-
-    true combine true shouldBe true
-    false combine true shouldBe true
-    true combine false shouldBe true
-    false combine false shouldBe false
+  def identityLaw[A](x: A)(implicit m: Monoid[A]): Boolean = {
+    (m.combine(x, m.empty) == x) && (m.combine(m.empty, x) == x)
   }
 
-  "booleanXor should abide the monoid laws" in {
-    import fp.monoids.MonoidInstances.{ booleanXorMonoid => xorMonoid }
+  "boolean monoids" - {
+    "booleanAnd should abide the monoid laws" in {
+      import fp.monoids.MonoidInstances.booleanAndMonoid
 
-    true combine xorMonoid.empty shouldBe true
-    false combine xorMonoid.empty shouldBe false
+      associativeLaw(true, true, true) shouldBe true
+      associativeLaw(false, true, true) shouldBe true
+      associativeLaw(true, false, true) shouldBe true
+      associativeLaw(true, true, false) shouldBe true
+      associativeLaw(false, false, false) shouldBe true
 
-    xorMonoid.empty combine true shouldBe true
-    xorMonoid.empty combine false shouldBe false
+      identityLaw(true) shouldBe true
+      identityLaw(false) shouldBe true
+    }
 
-    true combine true shouldBe false
-    false combine true shouldBe true
-    true combine false shouldBe true
-    false combine false shouldBe false
+    "booleanOr should abide the monoid laws" in {
+      import fp.monoids.MonoidInstances.booleanOrMonoid
+
+      associativeLaw(true, true, true) shouldBe true
+      associativeLaw(false, true, true) shouldBe true
+      associativeLaw(true, false, true) shouldBe true
+      associativeLaw(true, true, false) shouldBe true
+      associativeLaw(false, false, false) shouldBe true
+
+      identityLaw(true) shouldBe true
+      identityLaw(false) shouldBe true
+    }
+
+    "booleanXor should abide the monoid laws" in {
+      import fp.monoids.MonoidInstances.booleanXorMonoid
+
+      associativeLaw(true, true, true) shouldBe true
+      associativeLaw(false, true, true) shouldBe true
+      associativeLaw(true, false, true) shouldBe true
+      associativeLaw(true, true, false) shouldBe true
+      associativeLaw(false, false, false) shouldBe true
+
+      identityLaw(true) shouldBe true
+      identityLaw(false) shouldBe true
+    }
+
+    "booleanNor should abide the monoid laws" in {
+      import fp.monoids.MonoidInstances.booleanNorMonoid
+
+      associativeLaw(true, true, true) shouldBe true
+      associativeLaw(false, true, true) shouldBe true
+      associativeLaw(true, false, true) shouldBe true
+      associativeLaw(true, true, false) shouldBe true
+      associativeLaw(false, false, false) shouldBe true
+
+      identityLaw(true) shouldBe true
+      identityLaw(false) shouldBe true
+    }
   }
 
-  "booleanNor should abide the monoid laws" in {
-    import fp.monoids.MonoidInstances.{ booleanNorMonoid => norMonoid }
+  "set monoids" - {
+    val set1 = Set(1, 2)
+    val set2 = Set(3, 4)
+    val set3 = Set(5, 6)
 
-    true combine norMonoid.empty shouldBe true
-    false combine norMonoid.empty shouldBe false
+    "union should abide the monoid laws" in {
+      import fp.monoids.MonoidInstances.unionMonoid
 
-    norMonoid.empty combine true shouldBe true
-    norMonoid.empty combine false shouldBe false
+      associativeLaw(set1, set2, set3) shouldBe true
 
-    true combine true shouldBe true
-    false combine true shouldBe false
-    true combine false shouldBe false
-    false combine false shouldBe true
+      identityLaw(set1) shouldBe true
+      identityLaw(set2) shouldBe true
+    }
+
+    "intersection should abide the monoid laws" in {
+      import fp.monoids.MonoidInstances.{ intersectionSemigroup => s }
+
+      s.combine(set1, s.combine(set2, set3)) == s.combine(s.combine(set1, set2), set3) shouldBe true
+    }
+
+    "symmetric diff should abide the monoid laws" in {
+      import fp.monoids.MonoidInstances.symmetricDiffMonoid
+
+      associativeLaw(set1, set2, set3) shouldBe true
+
+      identityLaw(set1) shouldBe true
+      identityLaw(set2) shouldBe true
+    }
   }
 }

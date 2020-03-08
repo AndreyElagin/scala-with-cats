@@ -25,4 +25,20 @@ object MonoidInstances {
 
     def combine(x: Boolean, y: Boolean): Boolean = (!x && !y) || (x && y)
   }
+
+  implicit val unionMonoid: Monoid[Set[Int]] = new Monoid[Set[Int]] {
+    def empty: Set[Int] = Set.empty
+
+    def combine(x: Set[Int], y: Set[Int]): Set[Int] = x ++ y
+  }
+
+  implicit val intersectionSemigroup: Semigroup[Set[Int]] = new Semigroup[Set[Int]] {
+    def combine(x: Set[Int], y: Set[Int]): Set[Int] = x intersect y
+  }
+
+  implicit val symmetricDiffMonoid: Monoid[Set[Int]] = new Monoid[Set[Int]] {
+    def empty: Set[Int] = Set.empty
+
+    def combine(x: Set[Int], y: Set[Int]): Set[Int] = (x diff y) union (y diff x)
+  }
 }
