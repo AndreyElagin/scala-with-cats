@@ -19,6 +19,5 @@ object PrintableContramap {
     new PrintableContramap[Boolean] {
       def format(value: Boolean): String =
         if (value) "yes" else "no"
-
     }
 }
